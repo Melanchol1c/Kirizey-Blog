@@ -3,6 +3,7 @@ import { Layout, Menu, Breadcrumb } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../store/actions/auth";
+import "./Layout.scss";
 
 const { Header, Content, Footer } = Layout;
 
@@ -11,7 +12,6 @@ class CustomLayout extends React.Component {
     return (
       <Layout className="layout">
         <Header>
-          <div className="logo" />
           <Menu
             theme="dark"
             mode="horizontal"
@@ -22,14 +22,15 @@ class CustomLayout extends React.Component {
               <Link to="/">All Posts</Link>
             </Menu.Item>
             <Menu.Item key="2">Popular</Menu.Item>
+
             {this.props.isAuthenticated ? (
-              <Menu.Item key="3">
+              <Menu.Item key="3" className="login_tab">
                 <Link to="/" onClick={this.props.logout}>
                   Logout
                 </Link>
               </Menu.Item>
             ) : (
-              <Menu.Item key="4">
+              <Menu.Item key="3" className="login_tab">
                 <Link to="/login/">Login</Link>
               </Menu.Item>
             )}

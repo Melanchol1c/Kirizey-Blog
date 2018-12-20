@@ -6,10 +6,11 @@ import BaseRouter from "./routes";
 import CustomLayout from "./containers/Layout.jsx";
 import { connect } from "react-redux";
 import * as actions from "./store/actions/auth";
+import axios from "axios";
 
 class App extends Component {
-  componentDidMount() {
-    this.props.onTryAutoSignup();
+  async componentDidMount() {
+    await this.props.onTryAutoSignup();
   }
 
   render() {
@@ -27,7 +28,8 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.token !== null
+    isAuthenticated: state.token !== null,
+    user: state.user
   };
 };
 

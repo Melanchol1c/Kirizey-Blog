@@ -19,8 +19,11 @@ class Article(models.Model):
         ("CreationDate"), max_length=50, default='None')
     content = models.TextField(("Content"))
     likes = models.IntegerField(("Likes"), default=0)
-    user = models.OneToOneField(User, verbose_name=(
-        "User"), related_name="articles", on_delete=models.SET_NULL,
+    # user = models.OneToOneField(User, verbose_name=(
+    #     "User"), related_name="articles", on_delete=models.SET_NULL,
+    #     null=True, blank=True)
+    user = models.ForeignKey(User, verbose_name=(
+        "User"), related_name=('articles'), on_delete=models.SET_NULL,
         null=True, blank=True)
     tag = models.ManyToManyField(Tag, verbose_name=("Tag"),
                                  related_name=('tags'), null=True,

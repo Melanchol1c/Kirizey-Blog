@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { Card, Button, Modal, Input } from "antd";
-import CustomForm from "../components/Form";
+import ArticleForm from "../components/ArticleForm";
 
 class ArticleDetail extends React.Component {
   state = {
@@ -16,11 +16,11 @@ class ArticleDetail extends React.Component {
       .then(res => this.setState({ article: res.data }));
   }
 
-  handleDelete = e => {
-    const articleID = this.props.match.params.articleID;
-    axios.delete(`http://127.0.0.1:8000/api/article/${articleID}/`);
-    this.props.history.push("/");
-    this.forceUpdate();
+  handleDelete = async e => {
+    const articleID = await this.props.match.params.articleID;
+    await axios.delete(`http://127.0.0.1:8000/api/article/${articleID}/`);
+    await this.forceUpdate();
+    await this.props.history.push("/");
   };
 
   showModal = () => {
@@ -52,6 +52,9 @@ class ArticleDetail extends React.Component {
         <Button type="primary" onClick={this.showModal}>
           Редактировать
         </Button>
+        <Button type="danger" onClick={this.handleDelete}>
+          Удалить
+        </Button>
         <Modal
           title="Basic Modal"
           visible={this.state.visible}
@@ -60,7 +63,7 @@ class ArticleDetail extends React.Component {
           footer={null}
         >
           <h2>Update an article</h2>
-          <CustomForm
+          <ArticleForm
             requestType="put"
             articleID={this.props.match.params.articleID}
             btnText="Update"
