@@ -2,6 +2,7 @@ import React from "react";
 import Articles from "../components/Articles";
 import axios from "axios";
 import CustomForm from "../components/Form";
+import { Modal, Button } from "antd";
 
 const listData = [];
 for (let i = 0; i < 21; i++) {
@@ -18,7 +19,8 @@ for (let i = 0; i < 21; i++) {
 
 class ArticleList extends React.Component {
   state = {
-    articles: []
+    articles: [],
+    visible: false
   };
 
   componentDidMount() {
@@ -27,14 +29,37 @@ class ArticleList extends React.Component {
       .then(res => this.setState({ articles: [...res.data] }));
   }
 
+  showModal = () => {
+    this.setState({
+      visible: true
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
         <Articles data={this.state.articles} />
 
-        <h2>Create an article</h2>
-        <br />
-        <CustomForm requestType="post" articleID={null} btnText="Create" />
+        <Button type="primary" onClick={this.showModal}>
+          Написать статью
+        </Button>
+        <Modal
+          title="Basic Modal"
+          visible={this.state.visible}
+          onCancel={this.handleCancel}
+          centered
+          footer={null}
+        >
+          <h2>Create an article</h2>
+          <CustomForm requestType="post" articleID={null} btnText="Create" />
+        </Modal>
       </React.Fragment>
     );
   }
