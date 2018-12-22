@@ -3,6 +3,7 @@ import { Form, Icon, Input, Button, Spin } from "antd";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../store/actions/auth";
+import "./Authentication.scss";
 
 const FormItem = Form.Item;
 
@@ -63,10 +64,9 @@ class Login extends React.Component {
             </FormItem>
             <FormItem>
               <Button type="primary" htmlType="submit">
-                Login
+                Войти
               </Button>
-              Or
-              <NavLink to="/signup/">signup</NavLink>
+              <NavLink to="/signup/">зарегестрироваться</NavLink>
             </FormItem>
           </Form>
         )}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { Layout, Menu } from "antd";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../store/actions/auth";
@@ -19,36 +19,30 @@ class CustomLayout extends React.Component {
             style={{ lineHeight: "64px" }}
           >
             <Menu.Item key="1">
-              <Link to="/">All Posts</Link>
+              <Link to="/">Kirizey Blog</Link>
             </Menu.Item>
-            <Menu.Item key="2">Popular</Menu.Item>
 
             {this.props.isAuthenticated ? (
               <Menu.Item key="3" className="login_tab">
                 <Link to="/" onClick={this.props.logout}>
-                  Logout
+                  Выйти
                 </Link>
               </Menu.Item>
             ) : (
               <Menu.Item key="3" className="login_tab">
-                <Link to="/login/">Login</Link>
+                <Link to="/login/">Войти</Link>
               </Menu.Item>
             )}
           </Menu>
         </Header>
         <Content style={{ padding: "0 50px" }}>
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>
-              <Link to="/">Home</Link>{" "}
-            </Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-          </Breadcrumb>
           <div style={{ background: "#fff", padding: 24, minHeight: "80vh" }}>
             {this.props.children}
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>
-          Ant Design ©2018 Created by Ant UED
+          Ant Design ©2018 Created by{" "}
+          <a href="https://github.com/Melanchol1c"> Melanchol1c</a>
         </Footer>
       </Layout>
     );

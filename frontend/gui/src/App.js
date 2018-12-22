@@ -6,7 +6,6 @@ import BaseRouter from "./routes";
 import CustomLayout from "./containers/Layout.jsx";
 import { connect } from "react-redux";
 import * as actions from "./store/actions/auth";
-import axios from "axios";
 
 class App extends Component {
   async componentDidMount() {

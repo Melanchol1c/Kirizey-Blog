@@ -1,0 +1,24 @@
+.comment_btn {
+    float: right;
+    margin-top: 10px;
+}
+
+.article_author {
+    opacity: .6;
+}
+
+.anticon {
+    &-edit {
+        color: yellow;
+    }
+
+    &-delete {
+        color: red;
+    }
+}
+
+.ant-card {
+    &-head {
+        border-bottom: none;
+    }
+}

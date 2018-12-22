@@ -2,6 +2,7 @@ import React from "react";
 
 import { Form, Input, Button } from "antd";
 import axios from "axios";
+import "./ArticleForm.scss";
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -37,6 +38,7 @@ class ArticleForm extends React.Component {
             content: content,
             user: userID,
             created_date: date
+            // tag: { id: 1 }
           });
           return console.log(res);
         } catch (e) {
@@ -74,11 +76,11 @@ class ArticleForm extends React.Component {
             )
           }
         >
-          <FormItem label="Title">
-            <Input name="title" placeholder="input placeholder" />
+          <FormItem label="">
+            <Input name="title" placeholder="Заголовок" />
           </FormItem>
-          <FormItem label="Content">
-            <TextArea rows={4} name="content" placeholder="input placeholder" />
+          <FormItem label="">
+            <TextArea rows={6} name="content" placeholder="Текст статьи" />
           </FormItem>
           <FormItem>
             <Button type="primary" htmlType="submit">
