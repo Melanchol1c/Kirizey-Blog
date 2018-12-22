@@ -40,9 +40,11 @@ class Articles extends React.Component {
               title={
                 <div>
                   <Link to={`/articles/${item.id}`}>{item.title}</Link>
+                  <br />
+                  <p className="username">{item.user.username}</p>
                 </div>
               }
-              description={item.tag.name}
+              description={item.name}
             />
             {item.content.length > 200
               ? item.content.substr(0, 200) + "..."

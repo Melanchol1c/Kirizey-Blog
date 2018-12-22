@@ -14,13 +14,15 @@ class ArticleDetail extends React.Component {
     const articleID = await this.props.match.params.articleID;
 
     await axios
-      .get(`http://127.0.0.1:8000/api/article/${articleID}/`)
+      .get(`http://127.0.0.1:8000/api/articles/${articleID}/`)
       .then(res => this.setState({ article: res.data }));
   }
 
   handleDelete = async e => {
     const articleID = await this.props.match.params.articleID;
-    await axios.delete(`http://127.0.0.1:8000/api/article/${articleID}/`);
+    await axios.delete(
+      `http://127.0.0.1:8000/api/articles/${articleID}/delete/`
+    );
     await this.forceUpdate();
     await this.props.history.push("/");
   };
@@ -38,12 +40,10 @@ class ArticleDetail extends React.Component {
   };
 
   setLike = async () => {
-    console.log(this.state.article.likes);
     let likes = await (this.state.article.likes + 1);
-    console.log(typeof likes);
     try {
       const res = await axios.put(
-        `http://127.0.0.1:8000/api/article/${this.state.article.id}/`,
+        `http://127.0.0.1:8000/api/articles/${this.state.article.id}/`,
         {
           title: this.state.article.title,
           content: this.state.article.content,
@@ -63,7 +63,6 @@ class ArticleDetail extends React.Component {
 
   render() {
     let article = this.state.article;
-    console.log(article);
     const { TextArea } = Input;
     return (
       <React.Fragment>
@@ -73,7 +72,7 @@ class ArticleDetail extends React.Component {
               title={article.title}
               extra={
                 <h3 className="article_author">
-                  {article.tag.name ? (
+                  {article.tag ? (
                     <p className="article_author">{article.tag.name}</p>
                   ) : (
                     <React.Fragment />

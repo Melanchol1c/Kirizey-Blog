@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 
 class Tag(models.Model):
@@ -19,12 +20,11 @@ class Article(models.Model):
         ("CreationDate"), max_length=50, default='None')
     content = models.TextField(("Content"))
     likes = models.IntegerField(("Likes"), default=0)
-    user = models.ForeignKey(User, verbose_name=(
-        "User"), related_name=('articles'), on_delete=models.SET_NULL,
-        null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, blank=True, null=True)
     tag = models.ForeignKey(Tag, verbose_name=("Tag"),
                             related_name=('tags'), on_delete=models.SET_NULL,
-                            null=True, blank=True)
+                            null=True, blank=True, default=1)
 
     class Meta:
         verbose_name = ("Article")

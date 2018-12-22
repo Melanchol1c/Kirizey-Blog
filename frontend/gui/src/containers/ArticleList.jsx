@@ -16,7 +16,7 @@ class ArticleList extends React.Component {
 
   componentDidMount() {
     axios
-      .get("http://127.0.0.1:8000/api/article/")
+      .get("http://127.0.0.1:8000/api/articles/")
       .then(res => this.setState({ articles: [...res.data] }));
 
     axios
@@ -59,7 +59,7 @@ class ArticleList extends React.Component {
 
     let choosedTag = this.state.choosedTag;
     if (this.state.choosedTag) {
-      articles = articles.filter(a => a.tag.name === choosedTag);
+      articles = articles.filter(a => a.tag === choosedTag);
     }
 
     const Search = Input.Search;
