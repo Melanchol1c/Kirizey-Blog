@@ -1,13 +1,16 @@
 import React from "react";
 import axios from "axios";
-import { Button, Modal, Input, Card, Icon } from "antd";
+import { Button, Modal, Input, Card, Icon, List, Avatar } from "antd";
 import ArticleForm from "../components/ArticleForm";
 import "./ArticleDetail.scss";
 
 class ArticleDetail extends React.Component {
   state = {
     article: null,
-    currentUserId: null
+    currentUserId: null,
+    comment: null,
+    comments: [],
+    liked: false
   };
 
   async componentDidMount() {
@@ -16,6 +19,17 @@ class ArticleDetail extends React.Component {
     await axios
       .get(`http://127.0.0.1:8000/api/articles/${articleID}/`)
       .then(res => this.setState({ article: res.data }));
+
+    await axios
+      .get(`http://127.0.0.1:8000/api/comments/`)
+      .then(res => this.setState({ comments: [...res.data] }));
+
+    let comments = await this.state.comments;
+    comments = await comments.filter(
+      c => c.article.id === this.state.article.id
+    );
+    await this.setState({ comments: [...comments] });
+    await console.log(...this.state.comments);
   }
 
   handleDelete = async e => {
@@ -39,31 +53,65 @@ class ArticleDetail extends React.Component {
     });
   };
 
-  setLike = async () => {
-    let likes = await (this.state.article.likes + 1);
+  setLike = async liked => {
+    // let likes = await (this.state.article.likes + 1);
+    let article = await this.state.article;
     try {
       const res = await axios.put(
-        `http://127.0.0.1:8000/api/articles/${this.state.article.id}/`,
+        `http://127.0.0.1:8000/api/articles/${article.id}/update/`,
         {
-          title: this.state.article.title,
-          content: this.state.article.content,
-          likes: likes
-        },
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-          }
+          title: article.title,
+          content: article.content,
+          likes: liked ? (article.likes -= 1) : (article.likes += 1)
         }
       );
-      return console.log(res);
+      await this.setState({ liked: !this.state.liked });
+      return await console.log(res);
     } catch (e) {
-      return console.log(e);
+      return await console.log(e);
     }
   };
+
+  handleSendComment = async e => {
+    e.preventDefault();
+    let article = await this.state.article;
+
+    if (this.state.comment && localStorage.user !== undefined) {
+      let users = await axios.get("http://127.0.0.1:8000/api/users/");
+      let userok = await users.data.filter(
+        u => u.username === localStorage.user
+      );
+      let userID = await userok[0].id;
+
+      let comment = {
+        content: this.state.comment,
+        article: this.state.article.id,
+        user: userID
+      };
+      let res = await axios.post(
+        "http://127.0.0.1:8000/api/comments/create/",
+        comment
+      );
+
+      if (res.data) {
+        await this.setState({ comments: [...this.state.comments, comment] });
+        axios.put(`http://127.0.0.1:8000/api/articles/${article.id}/update/`, {
+          title: article.title,
+          content: article.content,
+          comments_count: (article.comments_count += 1)
+        });
+        return await document.location.reload(true);
+      }
+      await console.log(res);
+    }
+  };
+
+  hadleComment = e => this.setState({ comment: e.target.value });
 
   render() {
     let article = this.state.article;
     const { TextArea } = Input;
+    let comments = this.state.comments;
     return (
       <React.Fragment>
         {this.state.article ? (
@@ -80,36 +128,84 @@ class ArticleDetail extends React.Component {
                 </h3>
               }
               actions={[
-                <Icon type="like" onClick={this.setLike} />,
-                <Icon type="edit" onClick={this.showModal} />,
-                <Icon type="delete" onClick={this.handleDelete} />
+                localStorage.user !== undefined ? (
+                  <Icon
+                    type="like"
+                    style={
+                      this.state.liked ? { color: "red" } : { color: "gray" }
+                    }
+                    onClick={() => this.setLike(this.state.liked)}
+                  />
+                ) : (
+                  <React.Fragment />
+                ),
+                localStorage.user === this.state.article.user.username ? (
+                  <Icon type="edit" onClick={this.showModal} />
+                ) : (
+                  <React.Fragment />
+                ),
+
+                localStorage.user === this.state.article.user.username ? (
+                  <Icon type="delete" onClick={this.handleDelete} />
+                ) : (
+                  <React.Fragment />
+                )
               ]}
             >
               <p>{this.state.article.content}</p>
             </Card>
 
+            <List
+              itemLayout="horizontal"
+              dataSource={comments}
+              renderItem={item => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={
+                      <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+                    }
+                    title={<a href="#">{item.user.username}</a>}
+                    description={item.content}
+                  />
+                </List.Item>
+              )}
+            />
             <br />
-            <TextArea rows={4} placeholder="Оставьте комментарий" />
+            {localStorage.user !== undefined ? (
+              <React.Fragment>
+                <TextArea
+                  rows={4}
+                  name="comment"
+                  placeholder="Оставьте комментарий"
+                  onChange={this.hadleComment}
+                />
+                <Button
+                  className="comment_btn"
+                  type="primary"
+                  onClick={this.handleSendComment}
+                >
+                  Комментировать
+                </Button>
+              </React.Fragment>
+            ) : (
+              <p className="please_login">
+                Войдите, чтобы оставить комментарий
+              </p>
+            )}
+
             <br />
-            <Button
-              onClick={this.setLike}
-              className="comment_btn"
-              type="primary"
-            >
-              Комментировать
-            </Button>
+
             <Modal
-              title="Basic Modal"
+              title="Редактировать статью"
               visible={this.state.visible}
               onCancel={this.handleCancel}
               centered
               footer={null}
             >
-              <h2>Update an article</h2>
               <ArticleForm
                 requestType="put"
                 articleID={this.props.match.params.articleID}
-                btnText="Update"
+                btnText="Обновить"
               />
             </Modal>
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Icon } from "antd";
+import { List, Icon, Avatar } from "antd";
 import { Link } from "react-router-dom";
 import "./Articles.scss";
 
@@ -24,24 +24,27 @@ class Articles extends React.Component {
           onChange: page => {
             console.log(page);
           },
-          pageSize: 5
+          pageSize: 4
         }}
         dataSource={this.props.data}
         renderItem={item => (
           <List.Item
             key={item.title}
             actions={[
-              <IconText type="star-o" text="156" />,
+              // <IconText type="star-o" text="156" />,
               <IconText type="like-o" text={item.likes} />,
-              <IconText type="message" text="2" />
+              <IconText type="message" text={item.comments_count} />
             ]}
           >
             <List.Item.Meta
+              avatar={
+                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              }
               title={
                 <div>
+                  <p className="username">Автор: {item.user.username}</p>
                   <Link to={`/articles/${item.id}`}>{item.title}</Link>
                   <br />
-                  <p className="username">{item.user.username}</p>
                 </div>
               }
               description={item.name}

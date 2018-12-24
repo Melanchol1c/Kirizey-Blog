@@ -16,9 +16,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ArticleReadSerializer(serializers.ModelSerializer):
-    # user = serializers.StringRelatedField()
-    # tag = serializers.StringRelatedField()
-
     class Meta:
         model = Article
         fields = '__all__'
@@ -31,8 +28,14 @@ class ArticleWriteSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'
         depth = 1
+
+
+class CommentWriteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'

@@ -4,6 +4,7 @@ import ArticleList from "./containers/ArticleList";
 import ArticleDetail from "./containers/ArticleDetail";
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
+import MyArticles from "./containers/MyArticles";
 
 const BaseRouter = () => (
   <Switch>
@@ -11,6 +12,7 @@ const BaseRouter = () => (
     <Route path="/articles/:articleID/" component={ArticleDetail} />
     <Route exact path="/login/" component={Login} />
     <Route exact path="/signup/" component={Signup} />
+    <Route exact path="/my_articles/" component={MyArticles} />
   </Switch>
 );
 

@@ -10,13 +10,14 @@ const Option = Select.Option;
 class ArticleForm extends React.Component {
   state = {
     tags: null,
-    article: null
+    article: { title: null, content: null, tag: null }
   };
 
   async componentDidMount() {
     let res = await axios.get("http://127.0.0.1:8000/api/tag/");
     await this.setState({ tags: [...res.data] });
     await console.log(this.props);
+
     if (this.props.requestType === "put") {
       const articleID = await this.props.articleID;
       let res = await axios.get(
@@ -29,7 +30,7 @@ class ArticleForm extends React.Component {
   handleChangeTag = value => this.setState({ selectedTag: value });
 
   handleFormSubmit = async (e, requestType, articleID) => {
-    e.preventDefault();
+    // e.preventDefault();
     const title = e.target.elements.title.value;
     const content = e.target.elements.content.value;
 
@@ -65,7 +66,8 @@ class ArticleForm extends React.Component {
             }
           );
           await console.log(res);
-          return await this.forceUpdate();
+          await this.forceUpdate();
+          return await this.props.history.push("/");
         } catch (e) {
           return console.log(e);
         }
@@ -80,7 +82,8 @@ class ArticleForm extends React.Component {
               tag: this.state.selectedTag
             }
           );
-          return console.log(res);
+          await console.log(res);
+          return await this.forceUpdate();
         } catch (e) {
           return console.log(e);
         }
@@ -92,7 +95,6 @@ class ArticleForm extends React.Component {
 
   render() {
     let tags = this.state.tags;
-    let article = this.state.article ? this.state.article : null;
     return (
       <div>
         <Form
@@ -104,46 +106,84 @@ class ArticleForm extends React.Component {
             )
           }
         >
-          <FormItem>
-            <Input
-              name="title"
-              placeholder="Заголовок"
-              defaultValue={article ? article.title : ""}
-            />
-          </FormItem>
-          <FormItem>
-            <TextArea
-              autosize={{ minRows: 4, maxRows: 12 }}
-              name="content"
-              placeholder="Текст статьи"
-              defaultValue={article ? article.content : "11"}
-            />
-          </FormItem>
-          <FormItem>
-            <Select
-              showSearch
-              style={{ width: 200 }}
-              placeholder="Select a person"
-              optionFilterProp="children"
-              onChange={this.handleChangeTag}
-              defaultValue={article ? article.tag.id : "11"}
-              // onFocus={handleFocus}
-              // onBlur={handleBlur}
-              filterOption={(input, option) =>
-                option.props.children
-                  .toLowerCase()
-                  .indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {tags
-                ? tags.map(tag => (
-                    <Option key={tag.id} value={tag.id}>
-                      {tag.name}
-                    </Option>
-                  ))
-                : console.log(1)}
-            </Select>
-          </FormItem>
+          {this.state.article &&
+          this.state.article.title &&
+          this.state.article.content &&
+          this.state.article.tag.id ? (
+            <div>
+              {this.state.article.content
+                ? console.log(this.state.article.content)
+                : console.log("bad")}
+              <Input
+                name="title"
+                placeholder="Заголовок"
+                defaultValue={this.state.article.title}
+              />
+              <TextArea
+                autosize={{ minRows: 8, maxRows: 20 }}
+                name="content"
+                placeholder="Текст статьи"
+                defaultValue={this.state.article.content}
+              />
+              <Select
+                showSearch
+                style={{ width: 200 }}
+                placeholder="Выберите раздел"
+                optionFilterProp="children"
+                onChange={this.handleChangeTag}
+                defaultValue={this.state.article.tag.id}
+                filterOption={(input, option) =>
+                  option.props.children
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {tags
+                  ? tags.map(tag => (
+                      <Option key={tag.id} value={tag.id}>
+                        {tag.name}
+                      </Option>
+                    ))
+                  : console.log(1)}
+              </Select>
+            </div>
+          ) : (
+            <div>
+              <FormItem>
+                <Input name="title" placeholder="Заголовок" />
+              </FormItem>
+              <FormItem>
+                <TextArea
+                  autosize={{ minRows: 8, maxRows: 20 }}
+                  name="content"
+                  placeholder="Текст статьи"
+                />
+              </FormItem>
+              <FormItem>
+                <Select
+                  showSearch
+                  style={{ width: 200 }}
+                  placeholder="Выберите раздел"
+                  optionFilterProp="children"
+                  onChange={this.handleChangeTag}
+                  filterOption={(input, option) =>
+                    option.props.children
+                      .toLowerCase()
+                      .indexOf(input.toLowerCase()) >= 0
+                  }
+                >
+                  {tags
+                    ? tags.map(tag => (
+                        <Option key={tag.id} value={tag.id}>
+                          {tag.name}
+                        </Option>
+                      ))
+                    : console.log(1)}
+                </Select>
+              </FormItem>
+            </div>
+          )}
+
           <FormItem>
             <Button type="primary" htmlType="submit">
               {this.props.btnText}

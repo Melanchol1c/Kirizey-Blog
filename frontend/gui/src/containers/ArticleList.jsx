@@ -11,15 +11,20 @@ class ArticleList extends React.Component {
     tags: ["Все"],
     visible: false,
     choosedTag: "",
-    searchSrting: ""
+    searchSrting: "",
+    comments: null
   };
 
-  componentDidMount() {
-    axios
+  async componentDidMount() {
+    await axios
       .get("http://127.0.0.1:8000/api/articles/")
       .then(res => this.setState({ articles: [...res.data] }));
 
-    axios
+    await axios
+      .get("http://127.0.0.1:8000/api/comments/")
+      .then(res => this.setState({ comments: [...res.data] }));
+
+    await axios
       .get("http://127.0.0.1:8000/api/tag/")
       .then(res =>
         res.data.map(t => this.setState({ tags: [...this.state.tags, t.name] }))
@@ -69,7 +74,7 @@ class ArticleList extends React.Component {
           <Articles data={articles} />
 
           <Modal
-            title="Создание статьи"
+            title="Написание статьи"
             visible={this.state.visible}
             onCancel={this.handleCancel}
             centered
@@ -99,6 +104,7 @@ class ArticleList extends React.Component {
             <Search placeholder="Найти статью" onChange={this.handleSearch} />
             <br />
             <List
+              size="small"
               header={
                 <div>
                   <b> Разделы</b>

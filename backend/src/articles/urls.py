@@ -2,7 +2,8 @@ from django.urls import path
 from django.conf.urls import include
 from .routers import router
 from .api.views import (ArticleListView, ArticleDetailView, ArticleDeleteView,
-                        ArticleCreateView, ArticleUpdateView, UserPostView)
+                        ArticleCreateView, ArticleUpdateView, UserPostView,
+                        CommentCreateView, CommentListView)
 
 urlpatterns = [
     path('api/', include(router.urls)),
@@ -16,5 +17,8 @@ urlpatterns = [
     path('api/articles/<int:pk>/update/', ArticleUpdateView.as_view(),
          name='article_update'),
     path('api/users/<str:username>', UserPostView.as_view(),
-         name='article_user')
+         name='article_user'),
+    path('api/comments/', CommentListView.as_view(), name='comments_list'),
+    path('api/comments/create/', CommentCreateView.as_view(),
+         name='comments_create')
 ]

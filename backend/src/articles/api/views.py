@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from ..models import Article, Tag, Comment
 from .serializers import (ArticleReadSerializer, TagSerializer,
-                          CommentSerializer, UserSerializer,
-                          ArticleWriteSerializer)
+                          CommentReadSerializer, CommentWriteSerializer,
+                          UserSerializer,  ArticleWriteSerializer)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import (
@@ -13,7 +13,7 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView
 )
 from django.contrib.auth.models import User
-from .permissions import IsOwnerOrReadOnly
+# from .permissions import IsOwnerOrReadOnly
 from django.shortcuts import get_list_or_404
 from rest_framework.permissions import (
     AllowAny
@@ -48,6 +48,16 @@ class ArticleUpdateView(RetrieveUpdateAPIView):
     serializer_class = ArticleWriteSerializer
 
 
+class CommentCreateView(CreateAPIView):
+    serializer_class = CommentWriteSerializer
+    permission_classes = (AllowAny, )
+
+
+class CommentListView(ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentReadSerializer
+
+
 class UserPostView(APIView):
 
     @staticmethod
@@ -62,9 +72,9 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
 
 
-class CommentViewSet(viewsets.ModelViewSet):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+# class CommentViewSet(viewsets.ModelViewSet):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentSerializer
 
 
 class UsersViewSet(viewsets.ModelViewSet):

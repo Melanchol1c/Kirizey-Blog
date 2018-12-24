@@ -20,6 +20,7 @@ class Article(models.Model):
         ("CreationDate"), max_length=50, default='None')
     content = models.TextField(("Content"))
     likes = models.IntegerField(("Likes"), default=0)
+    comments_count = models.IntegerField(("Comments count"), default=0)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE, blank=True, null=True)
     tag = models.ForeignKey(Tag, verbose_name=("Tag"),
@@ -35,10 +36,12 @@ class Article(models.Model):
 
 
 class Comment(models.Model):
-    content = models.TextField(("Comment"))
+    content = models.TextField(("Comment value"))
     article = models.ForeignKey(Article, verbose_name=(
         "Article"), related_name=('comments'), on_delete=models.SET_NULL,
         null=True, blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         verbose_name = ("comment")
@@ -49,10 +52,12 @@ class Comment(models.Model):
 
 
 class UserAccount(models.Model):
-    avatar = models.CharField(("Avatar"), max_length=50)
+    # avatar = models.CharField(("Avatar"), max_length=50)
     user = models.OneToOneField(User, verbose_name=("User"),
                                 on_delete=models.CASCADE, null=True,
                                 blank=True)
+    likeArticles = models.ManyToManyField(
+        Article, verbose_name=("Liked articles"))
 
     class Meta:
         verbose_name = ("UserAccount")
