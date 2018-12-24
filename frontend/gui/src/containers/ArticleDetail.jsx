@@ -121,7 +121,10 @@ class ArticleDetail extends React.Component {
               extra={
                 <h3 className="article_author">
                   {article.tag ? (
-                    <p className="article_author">{article.tag.name}</p>
+                    <p className="article_author">
+                      {article.tag.name} <br />
+                      {article.created_date}
+                    </p>
                   ) : (
                     <React.Fragment />
                   )}

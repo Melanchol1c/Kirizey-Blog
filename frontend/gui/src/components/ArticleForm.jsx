@@ -120,7 +120,7 @@ class ArticleForm extends React.Component {
                 defaultValue={this.state.article.title}
               />
               <TextArea
-                autosize={{ minRows: 8, maxRows: 20 }}
+                autosize={{ minRows: 8, maxRows: 16 }}
                 name="content"
                 placeholder="Текст статьи"
                 defaultValue={this.state.article.content}
@@ -154,7 +154,7 @@ class ArticleForm extends React.Component {
               </FormItem>
               <FormItem>
                 <TextArea
-                  autosize={{ minRows: 8, maxRows: 20 }}
+                  autosize={{ minRows: 8, maxRows: 16 }}
                   name="content"
                   placeholder="Текст статьи"
                 />

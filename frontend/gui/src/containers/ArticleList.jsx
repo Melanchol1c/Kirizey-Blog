@@ -64,7 +64,7 @@ class ArticleList extends React.Component {
 
     let choosedTag = this.state.choosedTag;
     if (this.state.choosedTag) {
-      articles = articles.filter(a => a.tag === choosedTag);
+      articles = articles.filter(a => a.tag.name === choosedTag);
     }
 
     const Search = Input.Search;
