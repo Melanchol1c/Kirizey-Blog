@@ -118,16 +118,18 @@ class ArticleForm extends React.Component {
                 name="title"
                 placeholder="Заголовок"
                 defaultValue={this.state.article.title}
+                style={{ marginBottom: 10 }}
               />
               <TextArea
                 autosize={{ minRows: 8, maxRows: 16 }}
+                style={{ marginBottom: 10 }}
                 name="content"
                 placeholder="Текст статьи"
                 defaultValue={this.state.article.content}
               />
               <Select
                 showSearch
-                style={{ width: 200 }}
+                style={{ width: 200, marginBottom: 10 }}
                 placeholder="Выберите раздел"
                 optionFilterProp="children"
                 onChange={this.handleChangeTag}

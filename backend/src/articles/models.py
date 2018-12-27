@@ -38,7 +38,7 @@ class Article(models.Model):
 class Comment(models.Model):
     content = models.TextField(("Comment value"))
     article = models.ForeignKey(Article, verbose_name=(
-        "Article"), related_name=('comments'), on_delete=models.SET_NULL,
+        "Article"), related_name=('comments'), on_delete=models.CASCADE,
         null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE, blank=True, null=True)

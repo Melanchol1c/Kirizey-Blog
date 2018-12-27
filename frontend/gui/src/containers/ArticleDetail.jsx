@@ -25,6 +25,7 @@ class ArticleDetail extends React.Component {
       .then(res => this.setState({ comments: [...res.data] }));
 
     let comments = await this.state.comments;
+    await console.log(comments);
     comments = await comments.filter(
       c => c.article.id === this.state.article.id
     );
