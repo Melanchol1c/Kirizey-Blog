@@ -14,10 +14,9 @@ class MyArticles extends React.Component {
     await this.setState({ myArticles: res.data });
   }
   render() {
-    // const data = this.state.myArticles;
     const data = this.state.myArticles;
 
-    return this.state.myArticles ? (
+    return data ? (
       <List
         itemLayout="horizontal"
         dataSource={data}

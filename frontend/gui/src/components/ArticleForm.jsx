@@ -94,30 +94,25 @@ class ArticleForm extends React.Component {
   };
 
   render() {
-    let tags = this.state.tags;
+    let { tags, article } = this.state;
+    let { requestType, articleID, btnText } = this.props;
+    console.log(this.props);
     return (
       <div>
         <Form
           onSubmit={event =>
-            this.handleFormSubmit(
-              event,
-              this.props.requestType,
-              this.props.articleID
-            )
+            this.handleFormSubmit(event, requestType, articleID)
           }
         >
-          {this.state.article &&
-          this.state.article.title &&
-          this.state.article.content &&
-          this.state.article.tag.id ? (
+          {article && article.title && article.content && article.tag.id ? (
             <div>
-              {this.state.article.content
-                ? console.log(this.state.article.content)
+              {article.content
+                ? console.log(article.content)
                 : console.log("bad")}
               <Input
                 name="title"
                 placeholder="Заголовок"
-                defaultValue={this.state.article.title}
+                defaultValue={article.title}
                 style={{ marginBottom: 10 }}
               />
               <TextArea
@@ -125,7 +120,7 @@ class ArticleForm extends React.Component {
                 style={{ marginBottom: 10 }}
                 name="content"
                 placeholder="Текст статьи"
-                defaultValue={this.state.article.content}
+                defaultValue={article.content}
               />
               <Select
                 showSearch
@@ -133,7 +128,7 @@ class ArticleForm extends React.Component {
                 placeholder="Выберите раздел"
                 optionFilterProp="children"
                 onChange={this.handleChangeTag}
-                defaultValue={this.state.article.tag.id}
+                defaultValue={article.tag.id}
                 filterOption={(input, option) =>
                   option.props.children
                     .toLowerCase()
@@ -188,7 +183,7 @@ class ArticleForm extends React.Component {
 
           <FormItem>
             <Button type="primary" htmlType="submit">
-              {this.props.btnText}
+              {btnText}
             </Button>
           </FormItem>
         </Form>

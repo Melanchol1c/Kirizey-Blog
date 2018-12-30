@@ -23,6 +23,8 @@ class CustomLayout extends React.Component {
       </Menu>
     );
 
+    const { isAuthenticated, children } = this.props;
+
     return (
       <Layout className="layout">
         <Header>
@@ -36,7 +38,7 @@ class CustomLayout extends React.Component {
               <Link to="/">Kirizey Blog</Link>
             </Menu.Item>
 
-            {this.props.isAuthenticated ? (
+            {isAuthenticated ? (
               <Menu.Item key="3" className="login_tab">
                 <Dropdown overlay={menu}>
                   <div className="ant-dropdown-link">
@@ -60,7 +62,7 @@ class CustomLayout extends React.Component {
               minHeight: "100vh"
             }}
           >
-            {this.props.children}
+            {children}
           </div>
         </Content>
         <Footer style={{ textAlign: "center" }}>

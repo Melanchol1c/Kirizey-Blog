@@ -42,21 +42,12 @@ class ArticleDetail extends React.Component {
     await this.props.history.push("/");
   };
 
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
+  showModal = () => this.setState({ visible: true });
 
-  handleCancel = e => {
-    this.setState({
-      visible: false
-    });
-  };
+  handleCancel = () => this.setState({ visible: false });
 
   setLike = async liked => {
-    // let likes = await (this.state.article.likes + 1);
-    let article = await this.state.article;
+    let { article } = await this.state;
     try {
       const res = await axios.put(
         `http://127.0.0.1:8000/api/articles/${article.id}/update/`,
@@ -75,7 +66,7 @@ class ArticleDetail extends React.Component {
 
   handleSendComment = async e => {
     e.preventDefault();
-    let article = await this.state.article;
+    let { article } = await this.state;
 
     if (this.state.comment && localStorage.user !== undefined) {
       let users = await axios.get("http://127.0.0.1:8000/api/users/");
@@ -110,12 +101,11 @@ class ArticleDetail extends React.Component {
   hadleComment = e => this.setState({ comment: e.target.value });
 
   render() {
-    let article = this.state.article;
+    let { article, comments, liked, visible } = this.state;
     const { TextArea } = Input;
-    let comments = this.state.comments;
     return (
       <React.Fragment>
-        {this.state.article ? (
+        {article ? (
           <div>
             <Card
               title={article.title}
@@ -135,28 +125,26 @@ class ArticleDetail extends React.Component {
                 localStorage.user !== undefined ? (
                   <Icon
                     type="like"
-                    style={
-                      this.state.liked ? { color: "red" } : { color: "gray" }
-                    }
-                    onClick={() => this.setLike(this.state.liked)}
+                    style={liked ? { color: "red" } : { color: "gray" }}
+                    onClick={() => this.setLike(liked)}
                   />
                 ) : (
                   <React.Fragment />
                 ),
-                localStorage.user === this.state.article.user.username ? (
+                localStorage.user === article.user.username ? (
                   <Icon type="edit" onClick={this.showModal} />
                 ) : (
                   <React.Fragment />
                 ),
 
-                localStorage.user === this.state.article.user.username ? (
+                localStorage.user === article.user.username ? (
                   <Icon type="delete" onClick={this.handleDelete} />
                 ) : (
                   <React.Fragment />
                 )
               ]}
             >
-              <p>{this.state.article.content}</p>
+              <p>{article.content}</p>
             </Card>
 
             <List
@@ -201,7 +189,7 @@ class ArticleDetail extends React.Component {
 
             <Modal
               title="Редактировать статью"
-              visible={this.state.visible}
+              visible={visible}
               onCancel={this.handleCancel}
               centered
               footer={null}

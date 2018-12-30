@@ -31,18 +31,9 @@ class ArticleList extends React.Component {
       );
   }
 
-  showModal = () => {
-    this.setState({
-      visible: true
-    });
-  };
+  showModal = () => this.setState({ visible: true });
 
-  handleCancel = e => {
-    console.log(e);
-    this.setState({
-      visible: false
-    });
-  };
+  handleCancel = () => this.setState({ visible: false });
 
   handleChangeTag = tag =>
     tag === "Все"
@@ -56,6 +47,7 @@ class ArticleList extends React.Component {
 
   render() {
     let searchSrting = this.state.searchSrting.trim().toLowerCase();
+
     let articles = this.state.searchSrting
       ? this.state.articles.filter(a =>
           a.title.toLowerCase().match(searchSrting)

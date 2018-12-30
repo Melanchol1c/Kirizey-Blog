@@ -25,11 +25,11 @@ class Login extends React.Component {
     }
 
     const { getFieldDecorator } = this.props.form;
-
+    const { loading } = this.props;
     return (
-      <div>
+      <React.Fragment>
         {errorMessage}
-        {this.props.loading ? (
+        {loading ? (
           <Spin />
         ) : (
           <Form onSubmit={this.handleSubmit} className="login-form">
@@ -70,7 +70,7 @@ class Login extends React.Component {
             </FormItem>
           </Form>
         )}
-      </div>
+      </React.Fragment>
     );
   }
 }
